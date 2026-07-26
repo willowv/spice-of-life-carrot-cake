@@ -3,13 +3,12 @@
 	"id": "spice-of-life-carrot-cake",
 	"version": "${version}",
 	"name": "Spice of Life: Carrot Cake",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This mod is a stripped-down fork of Spice of Fabric by Siphalor. It implements a mechanic inspired by Spice of Life: Carrot Edition by lordcaszsius. Rather than health gain being based solely on unique food count as in the original Carrot Edition, it filters out foods with low saturation and determines the health bonus based on the total saturation of unique foods eaten. This encourages players to seek out the highest saturation value foods to eat at least once, which tend to also be the most difficult to acquire. Should pair well with Farmer's Delight.",
 	"authors": [
-		"Me!"
+		"willowv"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/willowv/spice-of-life-carrot-cake"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/spice-of-life-carrot-cake/icon.png",
