@@ -1,7 +1,6 @@
 MIT License
 
-Spice of Life: Carrot Cake
-Copyright (c) 2026 willowv
+Copyright (c) 2021-2022 Siphalor
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,12 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-Includes portions of other software related under the MIT license:
-- Spice of Fabric, Copyright 2021-2022 Siphalor. For licensing see LICENSE-SOF.
-  The README includes a link to the relevant repository to view the original code.
-
-This work includes portions of other software related under the Creative Commons
-Universal 1.0 license:
-- Fabric Template Mod Generator from fabricmc.net. For licensing see
-  LICENSE-FabricTemplate.
