@@ -63,7 +63,7 @@ public class SpiceOfLifeCarrotCake implements ModInitializer {
 		float uniqueSaturationMax = getTotalSaturation(BuiltInRegistries.ITEM.stream());
 		float milestoneSize = uniqueSaturationMax / (MAX_BONUS_HEARTS + 1);
 		double healthBonus = Math.floor(uniqueSaturationCurrent / milestoneSize) * 2;
-		LOGGER.debug("{}/{}, +{} Hearts",
+		LOGGER.debug("Saturation: {}/{} => Bonus: +{} Hearts",
 				uniqueSaturationCurrent,
 				uniqueSaturationMax,
 				healthBonus / 2);
