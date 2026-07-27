@@ -1,6 +1,6 @@
 # Spice of Life: Carrot Cake
 
-## Setup
+## Developer Setup
 
 For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
 
@@ -14,8 +14,12 @@ For setup instructions, please see the [Fabric Documentation page](https://docs.
 
   Rather than health gain being based solely on unique food count as in the original Carrot Edition, it filters out foods with low saturation and determines the health bonus based on the total saturation of unique foods eaten.
 
-  This encourages players to seek out the highest saturation value foods to eat at least once, which tend to also be the most difficult to acquire. Should pair well with Farmer's Delight.
+  This encourages players to seek out the highest saturation value foods to eat at least once, which tend to also be the most difficult to acquire.
+
+### Recommended Companion Mods
+- [Farmer's Delight Refabricated](https://modrinth.com/mod/farmers-delight-refabricated)
+- [Appleskin](https://modrinth.com/mod/appleskin)
 
 ## License
 
-This project is available to use under the MIT license. See file LICENSE for details.
+This project is available to use under the MIT license.
