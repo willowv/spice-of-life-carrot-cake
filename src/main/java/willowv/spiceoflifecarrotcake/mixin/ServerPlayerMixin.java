@@ -29,8 +29,6 @@ import willowv.spiceoflifecarrotcake.IFoodHistoryManager;
 import willowv.spiceoflifecarrotcake.SpiceOfLifeCarrotCake;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import static willowv.spiceoflifecarrotcake.SpiceOfLifeCarrotCake.*;
 
@@ -47,20 +45,9 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 	@Shadow
 	public ServerGamePacketListenerImpl connection;
 
-	@Unique
-	private Set<Item> uniqueFoodsEaten = null;
-
-	@Unique
-    public Set<Item> solcc$getUniqueFoodsEaten() { return uniqueFoodsEaten; }
-
-	@Inject(method = "<init>", at = @At("CTOR_HEAD"))
-	public void onConstruct(CallbackInfo ci) {
-		uniqueFoodsEaten = new HashSet<>();
-	}
-
 	@Inject(method = "restoreFrom", at = @At("RETURN"))
 	public void onPlayerCopied(ServerPlayer reference, boolean exact, CallbackInfo ci) {
-		uniqueFoodsEaten = ((IFoodHistoryManager) reference).solcc$getUniqueFoodsEaten();
+		solcc$setUniqueFoodsEaten(((IFoodHistoryManager) reference).solcc$getUniqueFoodsEaten());
 		updateMaxHealth(false);
 
 		// By default, on respawn your health is set to the normal max (20), so we do this to ensure the new max is followed.
@@ -82,10 +69,10 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 					LOGGER.warn("Food with ID {} could not be found. Ignoring item.", itemId);
 					continue;
 				}
-				uniqueFoodsEaten.add(uniqueFood);
+				solcc$getUniqueFoodsEaten().add(uniqueFood);
 			}
 		}
-		LOGGER.debug("Unique foods list from save: {}", uniqueFoodsEaten);
+		LOGGER.debug("Unique foods list from save: {}", solcc$getUniqueFoodsEaten());
 
 		updateMaxHealth(false);
 		if (data.contains("Health", Tag.TAG_ANY_NUMERIC)) {
@@ -96,10 +83,10 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 	@Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
 	public void onSerialize(CompoundTag data, CallbackInfo ci) {
 		ListTag uniqueFoodsList = new ListTag();
-		for (Item food : uniqueFoodsEaten) {
+		for (Item food : solcc$getUniqueFoodsEaten()) {
 			uniqueFoodsList.add(IntTag.valueOf(BuiltInRegistries.ITEM.getId(food)));
 		}
-		LOGGER.debug("Saving unique foods list: {}", uniqueFoodsEaten);
+		LOGGER.debug("Saving unique foods list: {}", solcc$getUniqueFoodsEaten());
 		data.put(UNIQUE_EATEN_NBT_KEY, uniqueFoodsList);
 		data.put(SpiceOfLifeCarrotCake.NBT_VERSION_ID, IntTag.valueOf(SpiceOfLifeCarrotCake.NBT_VERSION));
 	}
@@ -107,9 +94,9 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 	@Inject(method = "completeUsingItem", at = @At("HEAD"))
 	private void recordFoodEaten(CallbackInfo ci) {
 		Item eatenItem = this.getUseItem().getItem();
-		if(isProductiveFood(eatenItem) && !uniqueFoodsEaten.contains(eatenItem)) {
-			LOGGER.debug("Added {} to the unique foods eaten list: {}", eatenItem, uniqueFoodsEaten);
-			uniqueFoodsEaten.add(eatenItem);
+		if(isProductiveFood(eatenItem) && !solcc$getUniqueFoodsEaten().contains(eatenItem)) {
+			LOGGER.debug("Added {} to the unique foods eaten list: {}", eatenItem, solcc$getUniqueFoodsEaten());
+			solcc$getUniqueFoodsEaten().add(eatenItem);
 			updateMaxHealth(true);
 		}
 	}
@@ -117,9 +104,9 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 	@Unique
     private void updateMaxHealth(boolean announce) {
 		// Don't bother with calculation if they haven't eaten any productive foods yet.
-		if(uniqueFoodsEaten.isEmpty()) return;
+		if(solcc$getUniqueFoodsEaten().isEmpty()) return;
 
-		double currentHealthBonus = getHealthBonus(uniqueFoodsEaten);
+		double currentHealthBonus = getHealthBonus(solcc$getUniqueFoodsEaten());
 
 		AttributeInstance maxHealthAttr = this.getAttribute(Attributes.MAX_HEALTH);
 		assert maxHealthAttr != null;
