@@ -53,6 +53,9 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 	@Unique
     public Set<Item> solcc$getUniqueFoodsEaten() { return uniqueFoodsEaten; }
 
+	@Unique
+	public void solcc$setUniqueFoodsEaten(Set<Item> uniqueFoodsEaten) { this.uniqueFoodsEaten = uniqueFoodsEaten; }
+
 	@Inject(method = "<init>", at = @At("CTOR_HEAD"))
 	public void onConstruct(CallbackInfo ci) {
 		uniqueFoodsEaten = new HashSet<>();
