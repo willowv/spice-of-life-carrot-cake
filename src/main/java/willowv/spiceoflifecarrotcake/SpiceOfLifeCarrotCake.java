@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SpiceOfLifeCarrotCake implements ModInitializer {
@@ -56,6 +57,13 @@ public class SpiceOfLifeCarrotCake implements ModInitializer {
 		return item.isEdible() &&
 				(item.getFoodProperties() != null) &&
 				getSaturation(item.getFoodProperties()) >= SATURATION_THRESHOLD;
+	}
+
+	public static Set<Item> getUneatenFoods(Set<Item> uniqueFoodsEaten) {
+		return BuiltInRegistries.ITEM.stream().parallel()
+				.filter(SpiceOfLifeCarrotCake::isProductiveFood)
+				.filter((item) -> !uniqueFoodsEaten.contains(item))
+				.collect(Collectors.toSet());
 	}
 
 	public static double getHealthBonus(Set<Item> uniqueFoodsEaten) {
