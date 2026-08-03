@@ -20,7 +20,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"spice-of-life-carrot-cake" {
+		"solcc" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "spice-of-life-carrot-cake",
+	"id": "solcc",
 	"version": "${version}",
 	"name": "Spice of Life: Carrot Cake",
-	"description": "This mod is a stripped-down fork of Spice of Fabric by Siphalor. It implements a mechanic inspired by Spice of Life: Carrot Edition by lordcaszsius. Rather than health gain being based solely on unique food count as in the original Carrot Edition, it filters out foods with low saturation and determines the health bonus based on the total saturation of unique foods eaten. This encourages players to seek out the highest saturation value foods to eat at least once, which tend to also be the most difficult to acquire. Should pair well with Farmer's Delight.",
+	"description": "Rather than health gain being based solely on unique food count as in the original Carrot Edition, it filters out foods with low saturation and determines the health bonus based on the total saturation of unique foods eaten.\n\nThis encourages players to seek out the highest saturation value foods to eat at least once, which tend to also be the most difficult to acquire. Based on Spice of Fabric by Siphalor and inspired by Spice of Life: Carrot Edition by lordcazsius.",
 	"authors": [
 		"willowv"
 	],
@@ -11,20 +11,20 @@
 		"homepage": "https://github.com/willowv/spice-of-life-carrot-cake"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/spice-of-life-carrot-cake/icon.png",
+	"icon": "assets/solcc/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"willowv.spiceoflifecarrotcake.SpiceOfLifeCarrotCake"
+			"dev.willowv.solcc.SpiceOfLifeCarrotCake"
 		],
 		"client": [
-			"willowv.spiceoflifecarrotcake.client.SpiceOfLifeCarrotCakeClient"
+			"dev.willowv.solcc.client.SpiceOfLifeCarrotCakeClient"
 		]
 	},
 	"mixins": [
-		"spice-of-life-carrot-cake.mixins.json",
+		"solcc.mixins.json",
 		{
-			"config": "spice-of-life-carrot-cake.client.mixins.json",
+			"config": "solcc.client.mixins.json",
 			"environment": "client"
 		}
 	],

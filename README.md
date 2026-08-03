@@ -8,7 +8,7 @@ For setup instructions, please see the [Fabric Documentation page](https://docs.
 - This is a mod for [Minecraft](https://www.minecraft.net/en-us) version 1.20.1.
 - This mod was created using the [Fabric Template mod generator](https://fabricmc.net/develop/template/).
 - This mod uses extensive code from [Spice of Fabric by Siphalor](https://github.com/Siphalor/spiceoffabric). It has been refactored and simplified for this use case and specific Minecraft version. Only code specific to the implementation of the specific mechanic described below is original.
-- It implements a game mechanic which elaborates on an original concept from [Spice of Life: Carrot Edition by lordcaszsius](https://www.curseforge.com/minecraft/mc-mods/spice-of-life-carrot-edition).
+- It implements a game mechanic which elaborates on an original concept from [Spice of Life: Carrot Edition by lordcazsius](https://www.curseforge.com/minecraft/mc-mods/spice-of-life-carrot-edition).
 
 ## Description
 

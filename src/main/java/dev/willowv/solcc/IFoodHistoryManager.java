@@ -1,4 +1,4 @@
-package willowv.spiceoflifecarrotcake;
+package dev.willowv.solcc;
 
 import net.minecraft.world.item.Item;
 

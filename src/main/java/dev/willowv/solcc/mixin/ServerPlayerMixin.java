@@ -1,6 +1,7 @@
-package willowv.spiceoflifecarrotcake.mixin;
+package dev.willowv.solcc.mixin;
 
 import com.mojang.authlib.GameProfile;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -25,14 +26,15 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import willowv.spiceoflifecarrotcake.IFoodHistoryManager;
-import willowv.spiceoflifecarrotcake.SpiceOfLifeCarrotCake;
+import dev.willowv.solcc.IFoodHistoryManager;
+import dev.willowv.solcc.SpiceOfLifeCarrotCake;
+import dev.willowv.solcc.ClientboundUpdateFoodHistoryPacket;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static willowv.spiceoflifecarrotcake.SpiceOfLifeCarrotCake.*;
+import static dev.willowv.solcc.SpiceOfLifeCarrotCake.*;
 
 @Mixin(ServerPlayer.class)
 abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
@@ -65,6 +67,7 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 	public void onPlayerCopied(ServerPlayer reference, boolean exact, CallbackInfo ci) {
 		uniqueFoodsEaten = ((IFoodHistoryManager) reference).solcc$getUniqueFoodsEaten();
 		updateMaxHealth(false);
+		updateFoodsEaten();
 
 		// By default, on respawn your health is set to the normal max (20), so we do this to ensure the new max is followed.
 		if(!exact) setHealth(getMaxHealth());
@@ -88,7 +91,7 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 				uniqueFoodsEaten.add(uniqueFood);
 			}
 		}
-		LOGGER.debug("Unique foods list from save: {}", uniqueFoodsEaten);
+		LOGGER.debug("[Server] Unique foods list from save: {}", uniqueFoodsEaten);
 
 		updateMaxHealth(false);
 		if (data.contains("Health", Tag.TAG_ANY_NUMERIC)) {
@@ -102,7 +105,7 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 		for (Item food : uniqueFoodsEaten) {
 			uniqueFoodsList.add(IntTag.valueOf(BuiltInRegistries.ITEM.getId(food)));
 		}
-		LOGGER.debug("Saving unique foods list: {}", uniqueFoodsEaten);
+		LOGGER.debug("[Server] Saving unique foods list: {}", uniqueFoodsEaten);
 		data.put(UNIQUE_EATEN_NBT_KEY, uniqueFoodsList);
 		data.put(SpiceOfLifeCarrotCake.NBT_VERSION_ID, IntTag.valueOf(SpiceOfLifeCarrotCake.NBT_VERSION));
 	}
@@ -111,10 +114,17 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 	private void recordFoodEaten(CallbackInfo ci) {
 		Item eatenItem = this.getUseItem().getItem();
 		if(isProductiveFood(eatenItem) && !uniqueFoodsEaten.contains(eatenItem)) {
-			LOGGER.debug("Added {} to the unique foods eaten list: {}", eatenItem, uniqueFoodsEaten);
+			LOGGER.debug("[Server] Added {} to the unique foods eaten list: {}", eatenItem, uniqueFoodsEaten);
 			uniqueFoodsEaten.add(eatenItem);
 			updateMaxHealth(true);
+			updateFoodsEaten();
 		}
+	}
+
+	@Unique
+	private void updateFoodsEaten() {
+		if(connection != null && ServerPlayNetworking.canSend(connection, ClientboundUpdateFoodHistoryPacket.TYPE))
+			ServerPlayNetworking.send(connection.player, new ClientboundUpdateFoodHistoryPacket(uniqueFoodsEaten));
 	}
 
 	@Unique
@@ -130,7 +140,7 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 		double previousHealthBonus = maxHealthModifier == null ? 0f : maxHealthModifier.getAmount();
 
 		if(currentHealthBonus != previousHealthBonus) {
-			LOGGER.debug("Updating health bonus from {} to {} hearts.", previousHealthBonus / 2, currentHealthBonus / 2);
+			LOGGER.debug("[Server] Updating health bonus from {} to {} hearts.", previousHealthBonus / 2, currentHealthBonus / 2);
 			maxHealthAttr.removeModifier(PLAYER_HEALTH_MODIFIER_UUID);
 			maxHealthAttr.addPermanentModifier(new AttributeModifier(
 					PLAYER_HEALTH_MODIFIER_UUID,

@@ -10,4 +10,4 @@ pluginManagement {
 }
 
 // Should match your modid
-rootProject.name = 'spice-of-life-carrot-cake'
+rootProject.name = 'solcc'
