@@ -1,3 +1,7 @@
 {
-  "item.tooltip.solcc.never_eaten": "A new culinary experience!"
+  "item.tooltip.solcc.never_eaten": "A new culinary experience!",
+  "player.solcc.health_bonus": "The fire of life burns brighter within you.",
+  "player.solcc.craving": "You dream of %1$s.",
+  "command.solcc.clear_history": "Cleared food history.",
+  "command.solcc.clear_history_multiple": "Cleared history of players: %1$s"
 }

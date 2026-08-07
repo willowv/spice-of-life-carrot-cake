@@ -38,6 +38,7 @@ public class SpiceOfLifeCarrotCake implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Report issues at {}", REPO_LOCATION);
+		SOLCCCommands.register();
 	}
 
 	private static float getSaturation(FoodProperties props) {

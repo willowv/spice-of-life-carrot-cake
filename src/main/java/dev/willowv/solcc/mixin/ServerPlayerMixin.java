@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -57,6 +58,13 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 
 	@Unique
 	public void solcc$setUniqueFoodsEaten(Set<Item> uniqueFoodsEaten) { this.uniqueFoodsEaten = uniqueFoodsEaten; }
+
+	@Unique
+	public void solcc$clearUniqueFoodsEaten() {
+		this.uniqueFoodsEaten.clear();
+		updateMaxHealth(false);
+		updateFoodsEaten();
+	}
 
 	@Inject(method = "<init>", at = @At("CTOR_HEAD"))
 	public void onConstruct(CallbackInfo ci) {
@@ -129,9 +137,6 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 
 	@Unique
     private void updateMaxHealth(boolean announce) {
-		// Don't bother with calculation if they haven't eaten any productive foods yet.
-		if(uniqueFoodsEaten.isEmpty()) return;
-
 		double currentHealthBonus = getHealthBonus(uniqueFoodsEaten);
 
 		AttributeInstance maxHealthAttr = this.getAttribute(Attributes.MAX_HEALTH);
@@ -152,6 +157,7 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 				connection.send(new ClientboundUpdateAttributesPacket(getId(), Collections.singleton(maxHealthAttr)));
 
 			if (currentHealthBonus > previousHealthBonus && announce) {
+				displayClientMessage(Component.translatable("player.solcc.health_bonus"), true);
 				playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1F, 1F);
 			}
 		}
