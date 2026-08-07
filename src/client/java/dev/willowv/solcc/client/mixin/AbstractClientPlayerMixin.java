@@ -24,6 +24,7 @@ public class AbstractClientPlayerMixin implements IFoodHistoryManager {
 	@Unique
 	public void solcc$setUniqueFoodsEaten(Set<Item> uniqueFoodsEaten) { this.uniqueFoodsEaten = uniqueFoodsEaten; }
 
+	@Unique
 	public void solcc$clearUniqueFoodsEaten() { this.uniqueFoodsEaten.clear(); }
 
 	@Inject(method = "<init>", at = @At("CTOR_HEAD"))

@@ -3,6 +3,8 @@ package dev.willowv.solcc;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import org.slf4j.Logger;
@@ -46,6 +48,22 @@ public class SpiceOfLifeCarrotCake implements ModInitializer {
 		return props.getNutrition() * props.getSaturationModifier() * 2;
 	}
 
+	public static final Set<MobEffect> badEffects = Stream.of(
+			MobEffects.BLINDNESS,
+			MobEffects.CONFUSION,
+			MobEffects.HARM,
+			MobEffects.HUNGER,
+			MobEffects.POISON,
+			MobEffects.WEAKNESS,
+			MobEffects.WITHER).collect(Collectors.toSet());
+
+	private static boolean isUnhealthy(FoodProperties props) {
+		assert props != null;
+		return props.getEffects().stream()
+				.map((effectPair) -> effectPair.getFirst().getEffect())
+				.anyMatch(badEffects::contains);
+	}
+
 	private static float getTotalSaturation(Stream<Item> items) {
 		return items.parallel()
 				.filter(SpiceOfLifeCarrotCake::isProductiveFood)
@@ -57,6 +75,7 @@ public class SpiceOfLifeCarrotCake implements ModInitializer {
 	public static boolean isProductiveFood(Item item) {
 		return item.isEdible() &&
 				(item.getFoodProperties() != null) &&
+				!isUnhealthy(item.getFoodProperties()) &&
 				getSaturation(item.getFoodProperties()) >= SATURATION_THRESHOLD;
 	}
 
@@ -72,7 +91,7 @@ public class SpiceOfLifeCarrotCake implements ModInitializer {
 		float uniqueSaturationMax = getTotalSaturation(BuiltInRegistries.ITEM.stream());
 		float milestoneSize = uniqueSaturationMax / (MAX_BONUS_HEARTS + 1);
 		double healthBonus = Math.floor(uniqueSaturationCurrent / milestoneSize) * 2;
-		LOGGER.debug("Saturation: {}/{} => Bonus: +{} Hearts",
+		LOGGER.debug("[Server] Saturation: {}/{} => Bonus: +{} Hearts",
 				uniqueSaturationCurrent,
 				uniqueSaturationMax,
 				healthBonus / 2);

@@ -2,6 +2,7 @@ package dev.willowv.solcc.mixin;
 
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -157,7 +158,9 @@ abstract class ServerPlayerMixin extends Player implements IFoodHistoryManager {
 				connection.send(new ClientboundUpdateAttributesPacket(getId(), Collections.singleton(maxHealthAttr)));
 
 			if (currentHealthBonus > previousHealthBonus && announce) {
-				displayClientMessage(Component.translatable("player.solcc.health_bonus"), true);
+				displayClientMessage(
+						Component.translatable("player.solcc.health_bonus")
+							.withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.ITALIC), true);
 				playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1F, 1F);
 			}
 		}
